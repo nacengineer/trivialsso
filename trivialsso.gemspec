@@ -25,5 +25,8 @@ Gem::Specification.new do |s|
   s.add_dependency "rails",         "~> 3.2.0"
   s.add_dependency "activesupport", "~> 3.2.0"
   s.add_development_dependency "mocha"
+  s.add_development_dependency "forgery"
+  s.add_development_dependency "guard"
+  s.add_development_dependency "guard-test"
 
 end
