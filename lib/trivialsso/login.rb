@@ -25,11 +25,8 @@ module Trivialsso
     # otherwise, return the username and userdata stored in the cookie
     def self.decode_cookie(cookie)
       begin
-        sso_secret = Rails.configuration.sso_secret
-        raise Trivialsso::Error::MissingConfig if sso_secret.blank?
         raise Trivialsso::Error::MissingCookie if cookie.blank?
-        enc = ActiveSupport::MessageEncryptor.new(sso_secret, serializer: JSON)
-        userdata, timestamp = enc.decrypt_and_verify(cookie)
+        userdata, timestamp = encrypted_message.decrypt_and_verify(cookie)
         raise Trivialsso::Error::LoginExpired unless (timestamp - DateTime.now.to_i) > 0
         userdata
       rescue NoMethodError
@@ -43,6 +40,12 @@ module Trivialsso
     #returns the exipiry date from now. Used for setting an expiry date when creating cookies.
     def self.expire_date
       9.hours.from_now
+    end
+
+    def self.encrypted_message
+      sso_secret = Rails.configuration.sso_secret
+      raise Trivialsso::Error::MissingConfig if sso_secret.blank?
+      ActiveSupport::MessageEncryptor.new(sso_secret, serializer: JSON)
     end
 
   end
