@@ -28,5 +28,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "forgery"
   s.add_development_dependency "guard"
   s.add_development_dependency "guard-test"
+  s.add_development_dependency "guard-bundler"
+
+  if RUBY_PLATFORM =~ /darwin/
+    s.add_development_dependency "rb-fsevent"
+  elsif RUBY_PLATFORM =~ /linux/
+    s.add_development_dependency 'rb-inotify'
+  end
 
 end
