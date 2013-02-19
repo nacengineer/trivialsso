@@ -10,14 +10,14 @@ module Trivialsso
     # (Marshall, the default serializer, is not compatble between versions)
     def self.cookie(userdata, exp_date = expire_date)
       begin
-        raise Trivialsso::Error::MissingConfig if Rails.configuration.sso_secret.blank?
+        raise Trivialsso::Error::MissingConfig    if Rails.configuration.sso_secret.blank?
+        raise Trivialsso::Error::NoUsernameCookie if userdata['username'].blank?
+        enc = ActiveSupport::MessageEncryptor.new(Rails.configuration.sso_secret,
+                                                  :serializer => JSON)
+        enc.encrypt_and_sign([userdata,exp_date.to_i])
       rescue NoMethodError
         raise Trivialsso::Error::MissingConfig
       end
-      raise Trivialsso::Error::NoUsernameCookie if userdata['username'].blank?
-      enc = ActiveSupport::MessageEncryptor.new(Rails.configuration.sso_secret, :serializer => JSON)
-      cookie = enc.encrypt_and_sign([userdata,exp_date.to_i])
-      return cookie
     end
 
     # Decodes and verifies an encrypted cookie
@@ -25,33 +25,18 @@ module Trivialsso
     # otherwise, return the username and userdata stored in the cookie
     def self.decode_cookie(cookie)
       begin
-        raise Trivialsso::Error::MissingConfig if Rails.configuration.sso_secret.blank?
+        sso_secret = Rails.configuration.sso_secret
+        raise Trivialsso::Error::MissingConfig if sso_secret.blank?
+        raise Trivialsso::Error::MissingCookie if cookie.blank?
+        enc = ActiveSupport::MessageEncryptor.new(sso_secret, serializer: JSON)
+        userdata, timestamp = enc.decrypt_and_verify(cookie)
+        raise Trivialsso::Error::LoginExpired unless (timestamp - DateTime.now.to_i) > 0
+        userdata
       rescue NoMethodError
         raise Trivialsso::Error::MissingConfig
-      end
-      if cookie.blank?
-        raise Trivialsso::Error::MissingCookie
-      else
-        enc = ActiveSupport::MessageEncryptor.new(Rails.configuration.sso_secret, :serializer => JSON)
-        begin
-          userdata, timestamp = enc.decrypt_and_verify(cookie)
-        rescue ActiveSupport::MessageVerifier::InvalidSignature
-          #raise our own cookie error instead of passing on invalid signature.
-          raise Trivialsso::Error::BadCookie
-        rescue ActiveSupport::MessageEncryptor::InvalidMessage
-          #raise our own cookie error instead of passing on invalid message.
-          raise Trivialsso::Error::BadCookie
-        end
-
-        # Determine how many seconds our cookie is valid for.
-        timeRemain = timestamp - DateTime.now.to_i
-
-        #make sure current time is not past timestamp.
-        if timeRemain > 0
-          userdata
-        else
-          raise Trivialsso::Error::LoginExpired
-        end
+      rescue ActiveSupport::MessageVerifier::InvalidSignature ||
+             ActiveSupport::MessageEncryptor::InvalidMessage
+        raise Trivialsso::Error::BadCookie
       end
     end
 
