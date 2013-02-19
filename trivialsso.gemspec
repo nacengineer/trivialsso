@@ -5,9 +5,9 @@ require "trivialsso/version"
 Gem::Specification.new do |s|
   s.name        = "trivialsso"
   s.version     = Trivialsso::VERSION
-  s.authors     = ["David J. Lee"]
-  s.email       = ["david@lee.dj"]
-  s.homepage    = "http://lee.dj/"
+  s.authors     = ["David J. Lee","David Southard"]
+  s.email       = ["david@lee.dj","nacengineer@gmail.com"]
+  s.homepage    = "https://github.com/nacengineer/trivialsso"
   s.summary     = "A simple library to help with Single Sign On cookies"
   s.description = "Used to encode and decode cookies used in a single sign on implementation within the same domain"
 
