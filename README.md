@@ -36,8 +36,8 @@ When you create the cookie data an expire time is built into the payload. Settin
     # Create a hash of data we want to store in the cookie.
     userdata = {
       "username" => current_user.login,
-      "display" => current_user.display_name,
-      "groups" => current_user.memberof
+      "display"  => current_user.display_name,
+      "groups"   => current_user.memberof
     }
 
     #Generate the cookie data
@@ -45,9 +45,9 @@ When you create the cookie data an expire time is built into the payload. Settin
 
     # Set the cookie
     cookies[:sso_login] = {
-      :value => cookie,
-      :expires => Trivialsso::Login.expire_date,
-      :domain => 'mydomain.com',
+      :value    => cookie,
+      :expires  => Trivialsso::Login.expire_date,
+      :domain   => 'mydomain.com',
       :httponly => true,
     }
     ```
