@@ -23,8 +23,8 @@ Gem::Specification.new do |s|
   # s.add_runtime_dependency "rails"
 
   # Need at least 3.2.0 to support the JSON serialization.
-  s.add_dependency "rails",         "~> 3.2.0"
-  s.add_dependency "activesupport", "~> 3.2.0"
+  s.add_dependency "rails",         ">= 3.2.13"
+  s.add_dependency "activesupport", ">= 3.2.13"
   s.add_development_dependency "mocha"
   s.add_development_dependency "forgery"
   s.add_development_dependency "guard"
