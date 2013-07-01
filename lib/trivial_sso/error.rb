@@ -1,4 +1,4 @@
-module Trivialsso
+module TrivialSso
   module Error
 
     # General Cookie Error

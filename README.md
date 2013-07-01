@@ -1,4 +1,4 @@
-## Trivialsso
+## TrivialSso
 
 A very simple gem to help with creating and reading cookies across multiple sites in a Ruby on Rails application.
 
@@ -14,7 +14,7 @@ This does *not* work across domains.
 
 Add the gem to your Gemfile
 
-    gem 'trivialsso'
+    gem 'trivial_sso'
 
 Install the gem
 
@@ -22,7 +22,7 @@ Install the gem
 
 After you've installed the gem, you need to generate a configuration file.
 
-    rails g trivialsso:install
+    rails g trivial_sso:install
 
 This will create an initializer file with a shared secret. You need to modify this to a big long string of characters. Keep this safe from others as they could forge cookies for your sites if they get ahold of this string. All sites that use the single sign on must have this same shared secret for the cookies to properly interoperate.
 
@@ -41,12 +41,12 @@ When you create the cookie data an expire time is built into the payload. Settin
     }
 
     #Generate the cookie data
-    cookie = Trivialsso::Login.cookie(userdata)
+    cookie = TrivialSso::Login.cookie(userdata)
 
     # Set the cookie
     cookies[:sso_login] = {
       :value    => cookie,
-      :expires  => Trivialsso::Login.expire_date,
+      :expires  => TrivialSso::Login.expire_date,
       :domain   => 'mydomain.com',
       :httponly => true,
     }
@@ -58,7 +58,7 @@ The above code creates a hash of data we will be putting in the cookie, generate
 
 Retrieve the contents of the cookie by calling decode_cookie
 
-    @userdata = Trivialsso::Login.decode_cookie(cookies[:sso_login])
+    @userdata = TrivialSso::Login.decode_cookie(cookies[:sso_login])
 
 This will throw an exception if the cookie has been tampered with, or if the expiration date has passed.
 
@@ -68,7 +68,7 @@ Here are some methods you can add into your application controller to authentica
 
     ```ruby
     # If there is a problem with the cookie, redirect back to our central login server.
-    rescue_from Trivialsso::CookieError do |exception|
+    rescue_from TrivialSso::CookieError do |exception|
       redirect_to 'https://login.mydomain.com/'
     end
 
@@ -94,7 +94,7 @@ Here are some methods you can add into your application controller to authentica
 
     # our current_user decodes the cookie.
     def current_user
-      Trivialsso::Login.decode_cookie(cookies[:sso_login])
+      TrivialSso::Login.decode_cookie(cookies[:sso_login])
     end
 
     # Define the name we want to record in paper_trail (if using)
