@@ -20,6 +20,7 @@ group :test do
   gem 'guard-bundler'
   gem 'guard-livereload'
   gem 'guard-coffeescript'
+  gem 'guard-spork', github: 'guard/guard-spork'
   gem 'rack-perftools_profiler', require: 'rack/perftools_profiler'
   gem 'spork'
   gem 'fuubar'

@@ -1,7 +1,5 @@
 require 'active_support/core_ext'
-require 'spec/**/'
 
-# Need the mocha gem to properly stub out rails configuration.
 require 'trivial_sso'
 require 'forgery'
 require 'securerandom'

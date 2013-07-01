@@ -43,5 +43,12 @@ module TrivialSso
       end
     end
 
+    # Missing Rails configuration value.
+    class MissingRails < CookieError
+      def to_s
+        "Rails isn't loaded, you need Rails to use trivial_sso"
+      end
+    end
+
   end
 end
