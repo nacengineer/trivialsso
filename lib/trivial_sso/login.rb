@@ -58,15 +58,19 @@ module TrivialSso
 
     def self.encrypted_message
       raise TrivialSso::Error::MissingRails unless defined? Rails
-      sso_secret = Rails.configuration.sso_secret
-      raise TrivialSso::Error::MissingConfig if sso_secret.blank?
       ActiveSupport::MessageEncryptor.new(sso_secret, serializer: JSON)
     end
 
     def self.sso_secret
-      raise TrivialSso::Error::MissingRails  unless defined?(Rails)
-      raise TrivialSso::Error::MissingConfig if Rails.configuration.sso_secret.empty?
+      check_for_rails
+      if Rails.configuration.sso_secret.nil? || Rails.configuration.sso_secret.empty?
+        raise TrivialSso::Error::MissingConfig
+      end
       Rails.configuration.sso_secret
+    end
+
+    def self.check_for_rails
+      raise TrivialSso::Error::MissingRails unless defined?(Rails)
     end
 
   end
