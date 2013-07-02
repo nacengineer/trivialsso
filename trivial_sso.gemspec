@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 
+  s.files   = Dir.glob("{bin,lib}/**/*") + %w(MIT-LICENSE README.md CHANGELOG.md)
+  s.license = 'MIT'
   s.required_ruby_version = '2.0.0'
   s.require_paths         = ["lib"]
 
