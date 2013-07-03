@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
 
   s.files   = Dir.glob("{bin,lib}/**/*") + %w(MIT-LICENSE README.md CHANGELOG.md)
   s.license = 'MIT'
-  s.required_ruby_version = '2.0.0'
+  s.required_ruby_version = '>= 1.9.3'
   s.require_paths         = ["lib"]
 
   s.add_dependency "rails",         ">= 4.0.0"

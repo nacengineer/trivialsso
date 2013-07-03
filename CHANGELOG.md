@@ -1,6 +1,9 @@
 ## TrivialSso Change Log ##
 ### Changelog ###
 
+### 4.0.0.3
+- ease the required ruby back to 1.9.3
+
 #### 4.0.0
 - change version high number number to follow supported Rails version
 
